@@ -27,7 +27,7 @@ class RestPresenter extends BasePresenter {
      * @param $lastUpdate čas poslední aktualizace v Unix timestamp
      */
     public function renderMetaData($lastUpdate = 0) {
-        if ($lastUpdate < 0){
+        if ($lastUpdate < 0) {
             throw new Exception('Last update must be positive, negative given!');
         }
 
@@ -35,6 +35,27 @@ class RestPresenter extends BasePresenter {
 
         $httpResponse = \Nette\Environment::getHttpResponse();
         $httpResponse->setContentType('application/xml');
+    }
+
+    /**
+     * Registrace API
+     */
+    public function actionRegisterAPI() {
+        $data = '<?xml version="1.0" encoding="UTF-8"?>
+<endPoint>
+   <endPointUrl>http://w20.fit.cvut.wsolution.cz/api/</endPointUrl><!-- Endpoint base url: bez /v1/ -->
+</endPoint>';
+
+        $req = RestClientModel::put('http://mi-w20.appspot.com/api/endpoints/104-4', $data, null, null, 'application/xml');
+
+        if ($req->getResponseCode() == 200) {
+
+            $this->flashMessage('API bylo úspěšně zaregistrováno.');
+        } else {
+            $this->flashMessage('API se nepodařilo zaregistrovat.');
+        }
+
+        $this->redirect('Homepage:default');
     }
 
 }
