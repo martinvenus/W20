@@ -1,10 +1,11 @@
 <?php
-
 /**
- * My Application
+ * Data mining system
+ * MI-W20 at CZECH TECHNICAL UNIVERSITY IN PRAGUE
  *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
+ * @copyright  Copyright (c) 2011
+ * @package    W20
+ * @author     Ján Januška, Jaroslav Líbal, Martin Venuš
  */
 
 use Nette\Object,
@@ -14,8 +15,7 @@ use Nette\Object,
 /**
  * Users authenticator.
  *
- * @author     John Doe
- * @package    MyApplication
+ * @package    W20
  */
 class UsersModel extends Object implements Nette\Security\IAuthenticator
 {

@@ -6,14 +6,10 @@
  * @copyright  Copyright (c) 2010 John Doe
  * @package    MyApplication
  */
-
-
 use Nette\Debug,
-	Nette\Environment,
-	Nette\Application\Route,
-	Nette\Application\SimpleRouter;
-
-
+ Nette\Environment,
+ Nette\Application\Route,
+ Nette\Application\SimpleRouter;
 
 // Step 1: Load Nette Framework
 // this allows load Nette Framework classes automatically so that
@@ -36,22 +32,24 @@ Environment::loadConfig();
 $application = Environment::getApplication();
 $application->errorPresenter = 'Error';
 //$application->catchExceptions = TRUE;
-
-
-
 // Step 4: Setup application router
 $router = $application->getRouter();
 
 $router[] = new Route('index.php', array(
-	'presenter' => 'Homepage',
-	'action' => 'default',
-), Route::ONE_WAY);
+            'presenter' => 'Homepage',
+            'action' => 'default',
+                ), Route::ONE_WAY);
+
+$router[] = new RestRoute('api/v1/metadata', array(
+            'presenter' => 'Rest',
+            'action' => 'metadata',
+                ), RestRoute::METHOD_GET);
 
 $router[] = new Route('<presenter>/<action>/<id>', array(
-	'presenter' => 'Homepage',
-	'action' => 'default',
-	'id' => NULL,
-));
+            'presenter' => 'Homepage',
+            'action' => 'default',
+            'id' => NULL,
+        ));
 
 
 

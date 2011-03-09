@@ -1,26 +1,23 @@
 <?php
 
 /**
- * My Application
+ * Data mining system
+ * MI-W20 at CZECH TECHNICAL UNIVERSITY IN PRAGUE
  *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
+ * @copyright  Copyright (c) 2011
+ * @package    W20
+ * @author     Ján Januška, Jaroslav Líbal, Martin Venuš
  */
-
-
 
 /**
  * Homepage presenter.
  *
- * @author     John Doe
- * @package    MyApplication
+ * @author     Martin Venuš
+ * @package    W20
  */
-class HomepagePresenter extends BasePresenter
-{
+class HomepagePresenter extends BasePresenter {
 
-	public function renderDefault()
-	{
-		$this->template->message = 'We hope you enjoy this framework!';
-	}
+    public function renderDefault() {
+    }
 
 }

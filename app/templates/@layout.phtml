@@ -1,27 +1,29 @@
 {**
- * My Application layout template.
+ * Layout template
  *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
+ * @copyright  Copyright (c) 2011 Ján Januška, Jaroslav Líbal, Martin Venuš
+ * @package    W20
  *
  * @param string   $basePath web base path
  * @param string   $robots   tell robots how to index the content of a page (optinal)
  * @param array    $flashes  flash messages
  *}
 
+{assign $robots => noindex}
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	<meta name="description" content="Nette Framework web application skeleton">
+	<meta name="description" content="Semestrální projekt pro předmět MI-W20 na ČVUT v Praze">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>Nette Application Skeleton</title>
+	<title>Flickr analyser</title>
 
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css" type="text/css">
 	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css" type="text/css">
-	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	{* <link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon"> *}
 </head>
 
 <body>
