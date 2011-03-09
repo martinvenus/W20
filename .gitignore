@@ -1,5 +1,5 @@
 !.gitignore
 
-app/temp
-app/log
+temp/
+log/
 nbproject/
