@@ -9,7 +9,17 @@ if (isset($error)) {
     if (isset($pngImage)) {
         echo $pngImage;
     } else {
-        echo $xmlData;
+
+?><?xml version="1.0" encoding="UTF-8"?>
+<snapshots>
+<?php
+foreach($xmlData as $n=>$row){
+   echo "\t<snapshot created=\"" . "2011-02-03T20:26:00.501Z" . "\" node=\"" . $row['nodes'] . "\" edge=\"" . $row['edges'] . "\" />\n";
+}
+?>
+</snapshots>
+<?php
+     
     }
 }
 ?>
