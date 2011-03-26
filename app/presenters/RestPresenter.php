@@ -49,21 +49,35 @@ class RestPresenter extends BasePresenter {
 
         $accept = $httpRequest->getHeader("Accept");
 
-        if ($accept === "application/xml") {
-            $this->template->xmlData = SnapshotModel::getSnapshots();
-            $httpResponse->setContentType('application/xml');
-            $httpResponse->setCode(200);
-        } else if ($accept === "image/png") {
+        $types = $this->parseAccept($accept);
 
-            $data = SnapshotModel::getSnapshotsAsArray();
-            
-            $maxNodes = max($data['nodes']);
-            $maxEdges = max($data['edges']);
-            
-            $this->template->pngImage = file_get_contents(ChartModel::drawChart($data['nodes'], $data['edges'], $data['times']));
-            $httpResponse->setContentType('image/png');
-            $httpResponse->setCode(200);
-        } else {
+        $accepted = 0;
+
+        foreach ($types as $type => $q) {
+
+
+            if ($type === "application/xml") {
+                $this->template->xmlData = SnapshotModel::getSnapshots();
+                $httpResponse->setContentType('application/xml');
+                $httpResponse->setCode(200);
+                $accepted = 1;
+                break;
+            } else if ($type === "image/png") {
+
+                $data = SnapshotModel::getSnapshotsAsArray();
+
+                $maxNodes = max($data['nodes']);
+                $maxEdges = max($data['edges']);
+
+                $this->template->pngImage = file_get_contents(ChartModel::drawChart($data['nodes'], $data['edges'], $data['times']));
+                $httpResponse->setContentType('image/png');
+                $httpResponse->setCode(200);
+                $accepted = 1;
+                break;
+            }
+        }
+
+        if ($accepted == 0) {
             $this->template->error = "The service accepts either application/xml or image/png requests only.";
             $httpResponse->setCode(400);
         }
@@ -88,6 +102,30 @@ class RestPresenter extends BasePresenter {
         }
 
         $this->redirect('Homepage:default');
+    }
+
+    private function parseAccept($accept) {
+
+        $types = array();
+
+        // break up string into pieces (languages and q factors)
+        preg_match_all('/([a-z]{1,15}(\\/[a-z]{1,15}))\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $accept, $accept_parse);
+
+        if (count($accept_parse[1])) {
+            // vytvorime pole
+            $types = array_combine($accept_parse[1], $accept_parse[4]);
+
+            // defaultni q faktor je 1
+            foreach ($types as $type => $val) {
+                if ($val === '')
+                    $types[$type] = 1;
+            }
+
+            // serazeni pole
+            arsort($types, SORT_NUMERIC);
+        }
+
+        return $types;
     }
 
 }
