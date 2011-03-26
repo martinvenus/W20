@@ -45,6 +45,11 @@ $router[] = new RestRoute('api/v1/metadata', array(
             'action' => 'metadata',
                 ), RestRoute::METHOD_GET);
 
+$router[] = new RestRoute('api/v1/snapshots', array(
+            'presenter' => 'Rest',
+            'action' => 'snapshots',
+                ), RestRoute::METHOD_GET);
+
 $router[] = new Route('<presenter>/<action>/<id>', array(
             'presenter' => 'Homepage',
             'action' => 'default',
