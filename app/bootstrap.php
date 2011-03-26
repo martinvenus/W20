@@ -35,6 +35,14 @@ $application->errorPresenter = 'Error';
 // Step 4: Setup application router
 $router = $application->getRouter();
 
+$application->router[] = new Nette\Application\CliRouter(array(
+            'presenter' => 'Homepage',
+            'action' => 'default',
+            'id' => NULL,
+        ));
+
+$application->allowedMethods = NULL;
+
 $router[] = new Route('index.php', array(
             'presenter' => 'Homepage',
             'action' => 'default',
@@ -50,8 +58,6 @@ $router[] = new Route('<presenter>/<action>/<id>', array(
             'action' => 'default',
             'id' => NULL,
         ));
-
-
 
 // Step 5: Run the application!
 $application->run();
