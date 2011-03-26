@@ -14,7 +14,7 @@ if (isset($error)) {
 <snapshots>
 <?php
 foreach($xmlData as $n=>$row){
-   echo "\t<snapshot created=\"" . "2011-02-03T20:26:00.501Z" . "\" node=\"" . $row['nodes'] . "\" edge=\"" . $row['edges'] . "\" />\n";
+   echo "\t<snapshot created=\"" . Date('c', $row['date']) . "\" node=\"" . $row['nodes'] . "\" edge=\"" . $row['edges'] . "\" />\n";
 }
 ?>
 </snapshots>
