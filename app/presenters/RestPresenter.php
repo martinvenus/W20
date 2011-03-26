@@ -38,6 +38,38 @@ class RestPresenter extends BasePresenter {
     }
 
     /**
+     * Metoda, která zajistí data pro Rest službu api/v1/metadata
+     *
+     * @param $lastUpdate čas poslední aktualizace v Unix timestamp
+     */
+    public function renderSnapshots() {
+
+        $httpRequest = \Nette\Environment::getHttpRequest();
+        $httpResponse = \Nette\Environment::getHttpResponse();
+
+        $accept = $httpRequest->getHeader("Accept");
+
+        if ($accept === "application/xml") {
+            $this->template->xmlData = SnapshotModel::getSnapshots();
+            $httpResponse->setContentType('application/xml');
+            $httpResponse->setCode(200);
+        } else if ($accept === "image/png") {
+
+            $data = SnapshotModel::getSnapshotsAsArray();
+            
+            $maxNodes = max($data['nodes']);
+            $maxEdges = max($data['edges']);
+            
+            $this->template->pngImage = file_get_contents(ChartModel::drawChart($data['nodes'], $data['edges'], $data['times']));
+            $httpResponse->setContentType('image/png');
+            $httpResponse->setCode(200);
+        } else {
+            $this->template->error = "The service accepts either application/xml or image/png requests only.";
+            $httpResponse->setCode(400);
+        }
+    }
+
+    /**
      * Registrace API
      */
     public function actionRegisterAPI() {

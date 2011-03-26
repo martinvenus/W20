@@ -1,0 +1,25 @@
+<?php
+
+if (isset($error)) {
+
+    echo $error;
+
+} else {
+
+    if (isset($pngImage)) {
+        echo $pngImage;
+    } else {
+
+?><?xml version="1.0" encoding="UTF-8"?>
+<snapshots>
+<?php
+foreach($xmlData as $n=>$row){
+   echo "\t<snapshot created=\"" . Date('c', $row['date']) . "\" node=\"" . $row['nodes'] . "\" edge=\"" . $row['edges'] . "\" />\n";
+}
+?>
+</snapshots>
+<?php
+     
+    }
+}
+?>
