@@ -1,10 +1,12 @@
 <?php
 
 /**
- * My Application bootstrap file.
+ * Data mining system
+ * MI-W20 at CZECH TECHNICAL UNIVERSITY IN PRAGUE
  *
- * @copyright  Copyright (c) 2010 John Doe
- * @package    MyApplication
+ * @copyright  Copyright (c) 2011
+ * @package    W20
+ * @author     Ján Januška, Jaroslav Líbal, Martin Venuš
  */
 use Nette\Debug,
  Nette\Environment,

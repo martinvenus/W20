@@ -19,12 +19,17 @@ use Nette\Object, \Nette\String;
  */
 class FlickrAnalyseModel extends Object {
 
-    public static function analyseKeyword($flickr = null, $graph = null, $keyword) {
+    protected $userId;
+
+    public function FlickrAnalyseModel() {
+        $this->userId = 0;
+    }
+
+    public function analyseKeyword($flickr = null, $graph = null, $keyword) {
         $keywordStored = String::webalize($keyword);
 
-        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "any", "sort" => "interestingness-desc", "media" => "photos", "per_page" => 500));
+        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "date-posted-desc", "media" => "photos", "per_page" => 500));
 
-        $i = 0;
         foreach ($photos['photo'] as $key => $photo) {
             $addNewNode = true;
             //$user = $f->people_getInfo($photo['owner']);
@@ -35,19 +40,21 @@ class FlickrAnalyseModel extends Object {
                 if (strcmp($nodex->getMetadata('username'), $photo['owner']) == 0) {
                     $nodex->setMetadata($keywordStored, 1);
                     $addNewNode = false;
+                    unset($nodex);
                     break;
                 }
 
                 unset($nodex);
             }
+            unset($graphAllNodes);
 
             if ($addNewNode == true) {
                 $node = new Structures_Graph_Node();
-                $node->setMetadata('id', $i);
+                $node->setMetadata('id', $this->userId);
                 $node->setMetadata('username', $photo['owner']);
                 $node->setMetadata($keywordStored, 1);
                 $graph->addNode($node);
-                $i++;
+                $this->userId++;
 
                 unset($node);
             }
@@ -57,20 +64,26 @@ class FlickrAnalyseModel extends Object {
 
         foreach ($graphAllNodes as $nodeKey => $nodex) {
             foreach ($graphAllNodes as $nodeKeyInt => $nodeInt) {
-                if (@((int) $nodex->getMetadata($keywordStored) == 1) && (@(int) $nodeInt->getMetadata($keywordStored) == 1))
-                    if ($nodeKeyInt >= $nodeKey) {
-                        if ($nodeKey != $nodeKeyInt) {
-                            $nodex->connectTo($nodeInt);
-//                        echo "Spojuji vrchol " . $nodex->getMetadata('id') . " a vrchol " . $nodeInt->getMetadata('id') . "<br />";
-//                        echo "Vrchol " . $nodex->getData() . " ma stupen " . $nodex->inDegree() . "<br />";
+                if ($nodex->metadataKeyExists($keywordStored) && $nodeInt->metadataKeyExists($keywordStored)) {
+                    $keyword1 = (int) $nodex->getMetadata($keywordStored);
+                    $keyword2 = (int) $nodeInt->getMetadata($keywordStored);
 
-                            unset($nodeInt);
+                    if (($keyword1 == 1) && ($keyword2 == 1)) {
+                        if ($nodeKeyInt >= $nodeKey) {
+                            if ($nodeKey != $nodeKeyInt) {
+                                $nodex->connectTo($nodeInt);
+                                //echo "Spojuji vrchol " . $nodex->getMetadata('id') . " a vrchol " . $nodeInt->getMetadata('id') . "<br />";
+//                        echo "Vrchol " . $nodex->getData() . " ma stupen " . $nodex->inDegree() . "<br />";
+                            }
                         }
                     }
+                }
+                unset($nodeInt);
             }
-
             unset($nodex);
         }
+
+        unset($graphAllNodes);
     }
 
     public static function getKeywords() {

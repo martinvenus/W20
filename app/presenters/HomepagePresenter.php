@@ -35,8 +35,10 @@ class HomepagePresenter extends BasePresenter {
         $keywords = FlickrAnalyseModel::getKeywords();
         $keywords = $keywords->fetchPairs('id', 'keyword');
 
+        $flickrAnalyseModel = new FlickrAnalyseModel();
+
         foreach ($keywords as $keyword) {
-            FlickrAnalyseModel::analyseKeyword($flickr, $graph, $keyword);
+            $flickrAnalyseModel->analyseKeyword($flickr, $graph, $keyword);
         }
 
         $graphAllNodes = $graph->getNodes();
