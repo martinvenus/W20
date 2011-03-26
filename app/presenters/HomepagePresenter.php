@@ -60,7 +60,7 @@ class HomepagePresenter extends BasePresenter {
         } catch (Exception $e) {
             dibi::query('ROLLBACK');
             Debug::processException($e);
-//            $this->flashMessage("Error description: " . $e->getMessage(), 'error');
+            //$this->flashMessage("Error description: " . $e->getMessage(), 'error');
         }
     }
 

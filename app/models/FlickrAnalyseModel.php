@@ -19,23 +19,39 @@ use Nette\Object, \Nette\String;
  */
 class FlickrAnalyseModel extends Object {
 
+    /**
+     * ID uživatele ve struktuře
+     */
     protected $userId;
 
+    /**
+     * Konstruktor objektu
+     */
     public function FlickrAnalyseModel() {
         $this->userId = 0;
     }
 
+    /**
+     * Metoda, která analyzuje klíčová slova a vkládá autory fotografií do grafu
+     * Vytváří hrany mezi jednotlivými autory
+     *
+     * @param FlickrModel $flickr objekt flickr API
+     * @param Structures_Graph $graph objekt grafové struktury
+     * @param String $keyword klíčové slovo
+     */
     public function analyseKeyword($flickr = null, $graph = null, $keyword) {
         $keywordStored = String::webalize($keyword);
 
         $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "date-posted-desc", "media" => "photos", "per_page" => 500));
 
+        /* Projdeme všechny fotografie */
         foreach ($photos['photo'] as $key => $photo) {
             $addNewNode = true;
-            //$user = $f->people_getInfo($photo['owner']);
 
             $graphAllNodes = $graph->getNodes();
 
+            /* Zjistíme, zda již uživatel existuje v grafu */
+            /* V případě, že existuje, zaevidujeme u něj pouze nové klíčové slovo */
             foreach ($graphAllNodes as $nodeKey => $nodex) {
                 if (strcmp($nodex->getMetadata('username'), $photo['owner']) == 0) {
                     $nodex->setMetadata($keywordStored, 1);
@@ -48,6 +64,7 @@ class FlickrAnalyseModel extends Object {
             }
             unset($graphAllNodes);
 
+            /* V případě, že uživatel neexistuje, vložíme ho */
             if ($addNewNode == true) {
                 $node = new Structures_Graph_Node();
                 $node->setMetadata('id', $this->userId);
@@ -62,6 +79,7 @@ class FlickrAnalyseModel extends Object {
 
         $graphAllNodes = $graph->getNodes();
 
+        /* Vytvoříme hrany mezi všemi uživateli v daném klíčovém slově */
         foreach ($graphAllNodes as $nodeKey => $nodex) {
             foreach ($graphAllNodes as $nodeKeyInt => $nodeInt) {
                 if ($nodex->metadataKeyExists($keywordStored) && $nodeInt->metadataKeyExists($keywordStored)) {
@@ -73,7 +91,7 @@ class FlickrAnalyseModel extends Object {
                             if ($nodeKey != $nodeKeyInt) {
                                 $nodex->connectTo($nodeInt);
                                 //echo "Spojuji vrchol " . $nodex->getMetadata('id') . " a vrchol " . $nodeInt->getMetadata('id') . "<br />";
-//                        echo "Vrchol " . $nodex->getData() . " ma stupen " . $nodex->inDegree() . "<br />";
+                                //echo "Vrchol " . $nodex->getData() . " ma stupen " . $nodex->inDegree() . "<br />";
                             }
                         }
                     }
@@ -86,12 +104,24 @@ class FlickrAnalyseModel extends Object {
         unset($graphAllNodes);
     }
 
+    /**
+     * Metoda, získá všechna klíčová slova
+     *
+     * @return dataSource
+     */
     public static function getKeywords() {
         $result = dibi::dataSource('SELECT * FROM keyword');
 
         return $result;
     }
 
+    /**
+     * Metoda vloží informace o získaném snapshotu do databáze
+     *
+     * @param int $numberOfNodes počet vrcholů
+     * @param int $numberOfEdges počet hran
+     * @param serialized object $graph serializovaný objekt grafu (uloží se do datového typu BLOB)
+     */
     public static function addSnapshot($numberOfNodes, $numberOfEdges, $graph) {
         dibi::query('INSERT INTO snapshot (nodes, edges, date, snapshot) VALUES (%i, %i, %i, %s)', $numberOfNodes, $numberOfEdges, time(), $graph);
     }
