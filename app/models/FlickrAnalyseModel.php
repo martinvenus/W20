@@ -42,7 +42,7 @@ class FlickrAnalyseModel extends Object {
     public function analyseKeyword($flickr = null, $graph = null, $keyword) {
         $keywordStored = String::webalize($keyword);
 
-        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "date-posted-desc", "media" => "photos", "per_page" => 500));
+        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "interestingness-desc", "media" => "photos", "per_page" => 500));
 
         /* Projdeme všechny fotografie */
         foreach ($photos['photo'] as $key => $photo) {
@@ -124,6 +124,27 @@ class FlickrAnalyseModel extends Object {
      */
     public static function addSnapshot($numberOfNodes, $numberOfEdges, $graph) {
         dibi::query('INSERT INTO snapshot (nodes, edges, date, snapshot) VALUES (%i, %i, %i, %s)', $numberOfNodes, $numberOfEdges, time(), $graph);
+    }
+
+    /**
+     * Metoda, která přidá informace o uivateli ke každému vrcholu
+     *
+     * @param Structured_Graph $graph
+     * @param FlickrModel $flickr
+     */
+    public static function addInfoToUsers($graph, $flickr) {
+        $graphAllNodes = $graph->getNodes();
+
+        foreach ($graphAllNodes as $nodeKey => $node) {
+
+            $userInfo = $flickr->people_getInfo($node->getMetadata('username'));
+
+            $node->setMetadata('userInfo', $userInfo);
+
+            unset($node);
+        }
+
+        unset($graphAllNodes);
     }
 
 }

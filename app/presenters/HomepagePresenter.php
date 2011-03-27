@@ -41,6 +41,8 @@ class HomepagePresenter extends BasePresenter {
             $flickrAnalyseModel->analyseKeyword($flickr, $graph, $keyword);
         }
 
+        FlickrAnalyseModel::addInfoToUsers($graph, $flickr);
+
         $graphAllNodes = $graph->getNodes();
 
         $numberOfEdges = 0;
@@ -56,11 +58,11 @@ class HomepagePresenter extends BasePresenter {
         try {
             FlickrAnalyseModel::addSnapshot($numberOfNodes, $numberOfEdges, $serializedGraph);
             dibi::query('COMMIT');
-            //$this->flashMessage("Snapshot byl úspěšně vytvořen.");
+            $this->flashMessage("Snapshot byl úspěšně vytvořen.");
         } catch (Exception $e) {
             dibi::query('ROLLBACK');
             Debug::processException($e);
-            //$this->flashMessage("Error description: " . $e->getMessage(), 'error');
+            $this->flashMessage("Error description: " . $e->getMessage(), 'error');
         }
     }
 
