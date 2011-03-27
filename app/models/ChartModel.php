@@ -114,7 +114,7 @@ class ChartModel {
                 . $chd .
                 "&chdl=Nodes|Edges&chdlp=b"
                 . $chg .
-                "&chls=1|1&chma=5,5,5,25&chm=r,FF0000,0,0,0&chtt=Po%C4%8Det%20u%C5%BEivatel%C5%AF%20a%20vz%C3%A1jemn%C3%A9%20konexe";
+                "&chls=1|1&chma=5,5,5,25&chm=r,FF0000,0,0,0&chtt=Po%C4%8Det%20u%C5%BEivatel%C5%AF%20a%20vztahy%20mezi%20nimi";
 
         return $url;
     }
