@@ -133,15 +133,37 @@ class RestPresenter extends BasePresenter {
      */
     public function renderGexf() {
 
-        $data = SnapshotModel::getDataList();
-
-        $this->template->uzly = $data[0];
-        $this->template->hrany = $data[1];
-        $this->template->zmeneno = $data[2];
-
+        $httpRequest = \Nette\Environment::getHttpRequest();
         $httpResponse = \Nette\Environment::getHttpResponse();
-        $httpResponse->setContentType('application/xml');
 
+        $accept = $httpRequest->getHeader("Accept");
+
+        $types = $this->parseAccept($accept);
+
+        $accepted = 0;
+
+        foreach ($types as $type => $q) {
+
+            if ($type === "application/xml") {
+
+                $data = SnapshotModel::getDataList();
+
+                $this->template->uzly = $data[0];
+                $this->template->hrany = $data[1];
+                $this->template->zmeneno = $data[2];
+
+                $httpResponse->setContentType('application/xml');
+
+                $httpResponse->setCode(200);
+                $accepted = 1;
+                break;
+            }
+        }
+
+        if ($accepted == 0) {
+            $this->template->error = "The service accepts application/xml requests only.";
+            $httpResponse->setCode(400);
+        }
     }
 
 }
