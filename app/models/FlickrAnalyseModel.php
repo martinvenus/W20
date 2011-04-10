@@ -42,7 +42,7 @@ class FlickrAnalyseModel extends Object {
     public function analyseKeyword($flickr = null, $graph = null, $keyword) {
         $keywordStored = String::webalize($keyword);
 
-        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "interestingness-desc", "media" => "photos", "per_page" => 500));
+        $photos = $flickr->photos_search(array("tags" => $keyword, "tag_mode" => "all", "sort" => "interestingness-desc", "media" => "photos", "per_page" => 50));
 
         /* Projdeme všechny fotografie */
         foreach ($photos['photo'] as $key => $photo) {
