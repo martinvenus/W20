@@ -22,7 +22,7 @@ require LIBS_DIR . '/Nette/loader.php';
 
 // Step 2: Configure environment
 // 2a) enable Nette\Debug for better exception and error visualisation
-Debug::enable(Debug::DETECT, APP_DIR . '/../../log/error.log');
+Debug::enable(Debug::DEVELOPMENT);
 
 // 2b) load configuration from config.ini file
 Environment::loadConfig();
@@ -58,6 +58,11 @@ $router[] = new RestRoute('api/v1/metadata', array(
 $router[] = new RestRoute('api/v1/snapshots', array(
             'presenter' => 'Rest',
             'action' => 'snapshots',
+                ), RestRoute::METHOD_GET);
+
+$router[] = new RestRoute('api/v1/gexf', array(
+            'presenter' => 'Rest',
+            'action' => 'gexf',
                 ), RestRoute::METHOD_GET);
 
 $router[] = new Route('<presenter>/<action>/<id>', array(

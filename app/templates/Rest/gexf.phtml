@@ -1,0 +1,61 @@
+<?php
+
+if (isset($error)) {
+
+    echo $error;
+
+} else {    
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+    <meta lastmodifieddate="{$zmeneno}">
+        <creator>MI-W20: Tým 104-4</creator>
+        <description>Analýza propojení uživatelů Flickru na základě klíčových slov</description>
+    </meta>
+    <graph defaultedgetype="directed">
+        <attributes class="node">
+            <attribute id="0" title="snapshot" type="integer"/>
+            <attribute id="1" title="realname" type="string"/>
+            <attribute id="2" title="location" type="string"/>
+            <attribute id="3" title="photosurl" type="string"/>
+        </attributes>
+        <nodes>
+<?php
+foreach($uzly as $n=>$row){
+echo "\t\t\t\t\t<node id=\"" . htmlspecialchars($row['id']) . "\" start=\"" . $row['date'] .  "\">\n";
+echo "\t\t\t\t\t\t<attvalues>\n";
+if(isset($row['snapshotId'])){
+    echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . htmlspecialchars($row['snapshotId']) . "\"/>\n";
+}
+if(isset($row['realname'])){
+    echo "\t\t\t\t\t\t\t<attvalue for=\"1\" value=\"" . htmlspecialchars($row['realname']) . "\"/>\n";
+}
+if(isset($row['location'])){
+    echo "\t\t\t\t\t\t\t<attvalue for=\"2\" value=\"" . htmlspecialchars($row['location']) . "\"/>\n";
+}
+if(isset($row['url'])){
+    echo "\t\t\t\t\t\t\t<attvalue for=\"3\" value=\"" . htmlspecialchars($row['url']) . "\"/>\n";
+}
+echo "\t\t\t\t\t\t</attvalues>\n";
+echo "\t\t\t\t\t</node>\n";
+}
+?>
+        </nodes>
+        <edges>
+<?php
+$i = 0;
+foreach($hrany as $n=>$row){
+echo "\t\t\t\t\t<edge id=\"" . $i . "\" source=\"" . htmlspecialchars($row['from']) . "\" target=\"" . htmlspecialchars($row['to']) . "\" start=\"" . $row['date'] . "\"/>\n";
+$i++;
+}
+?>
+        </edges>
+    </graph>
+</gexf>
+
+
+<?php
+
+  }
+
+?>

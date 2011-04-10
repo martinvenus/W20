@@ -128,4 +128,20 @@ class RestPresenter extends BasePresenter {
         return $types;
     }
 
+    /**
+     * Metoda, která vrátí data ve formátu GEXF
+     */
+    public function renderGexf() {
+
+        $data = SnapshotModel::getDataList();
+
+        $this->template->uzly = $data[0];
+        $this->template->hrany = $data[1];
+        $this->template->zmeneno = $data[2];
+
+        $httpResponse = \Nette\Environment::getHttpResponse();
+        $httpResponse->setContentType('application/xml');
+
+    }
+
 }
