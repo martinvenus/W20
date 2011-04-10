@@ -8,7 +8,7 @@ if (isset($error)) {
 ?>
 <?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
-    <meta lastmodifieddate="{$zmeneno}">
+    <meta lastmodifieddate="<?php echo date('Y-m-d', $zmeneno); ?>">
         <creator>MI-W20: Tým 104-4</creator>
         <description>Analýza propojení uživatelů Flickru na základě klíčových slov</description>
     </meta>
@@ -22,7 +22,7 @@ if (isset($error)) {
         <nodes>
 <?php
 foreach($uzly as $n=>$row){
-echo "\t\t\t\t\t<node id=\"" . htmlspecialchars($row['id']) . "\" start=\"" . $row['date'] .  "\">\n";
+echo "\t\t\t\t\t<node id=\"" . htmlspecialchars($row['id']) . "\" start=\"" . date('Y-m-d', $row['date']) .  "\">\n";
 echo "\t\t\t\t\t\t<attvalues>\n";
 if(isset($row['snapshotId'])){
     echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . htmlspecialchars($row['snapshotId']) . "\"/>\n";
@@ -45,7 +45,7 @@ echo "\t\t\t\t\t</node>\n";
 <?php
 $i = 0;
 foreach($hrany as $n=>$row){
-echo "\t\t\t\t\t<edge id=\"" . $i . "\" source=\"" . htmlspecialchars($row['from']) . "\" target=\"" . htmlspecialchars($row['to']) . "\" start=\"" . $row['date'] . "\"/>\n";
+echo "\t\t\t\t\t<edge id=\"" . $i . "\" source=\"" . htmlspecialchars($row['from']) . "\" target=\"" . htmlspecialchars($row['to']) . "\" start=\"" . date('Y-m-d', $row['date']) . "\"/>\n";
 $i++;
 }
 ?>
