@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results>
+<?php
+foreach($xmlData as $n=>$row){
+   echo "\t<result snapshotCreated=\"" . Date('c', $row['date']) . "\">\n";
+   echo "\t\t<metric name=\"erdos\" value=\"" . $erdos[$row['id']] . "\" />\n";
+   echo "\t\t<metric name=\"clustering\" value=\"" . $clustering[$row['id']] . "\" />\n";
+   echo "\t\t<metric name=\"overlap\" value=\"" . $overlap[$row['id']] . "\" />\n";
+   echo "\t\t<metric name=\"embeddedness\" value=\"" . $embeddedness[$row['id']] . "\" />\n";
+   echo "\t\t<metric name=\"density\" value=\"" . $density[$row['id']] . "\" />\n";
+   echo "\t</result>\n";
+}
+?>
+</results>

@@ -49,8 +49,9 @@ class SnapshotModel {
         return $all;
     }
 
+
     /**
-     * Vybere snapshody ke zpracování
+     * Vybere snapshoty ke zpracování
      */
     protected static function getGraphs() {
 
@@ -59,6 +60,18 @@ class SnapshotModel {
         $all = $result->fetchAll();
 
         return $all;
+    }
+
+    /**
+     * Vrátí jeden snapshot
+     */
+    public static function getGraph($snap) {
+
+        $result = dibi::query('SELECT snapshot FROM snapshot WHERE id=%i', $snap);
+
+        $single = $result->fetchSingle();
+        
+        return $single;
     }
 
     /**

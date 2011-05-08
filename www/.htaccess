@@ -7,11 +7,14 @@ Options -Indexes
 Options +FollowSymLinks
 
 # configure PHP
-# <IfModule mod_php5.c>
+<IfModule mod_php5.c>
+php_value max_execution_time  120
 #    php_flag register_globals off
 #    php_flag zend.ze1_compatibility_mode off
 #	php_flag session.auto_start off
-# </IfModule>
+</IfModule>
+
+
 
 # enable cool URL
 <IfModule mod_rewrite.c>
