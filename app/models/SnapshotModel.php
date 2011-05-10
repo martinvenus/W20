@@ -119,7 +119,8 @@ class SnapshotModel {
                         $nData = $arcs[$i]->getMetadata('userInfo');
                         $ui = $nData['username'];
                         // ukládáme odkud kam hrana vede a datum kdy byla objevena
-                        $hrana = array("from" => $userInfo['username'], "to" => $ui, "date" => $g['date']);
+                        $hid = md5($userInfo['username'] . $ui);
+                        $hrana = array("hid" => $hid, "from" => $userInfo['username'], "to" => $ui, "date" => $g['date']);
                         array_push($hrany, $hrana);
                     }
 

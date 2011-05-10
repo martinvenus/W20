@@ -263,14 +263,12 @@ class RestPresenter extends BasePresenter {
 
         $accepted = 0;
 
-//        foreach ($types as $type => $q) {
-//
-//            if ($type === "application/xml") {
+        foreach ($types as $type => $q) {
+
+            if ($type === "application/xml") {
 
                 $data = SnapshotModel::getDataList();
 
-                // HHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-                
                 require_once 'Structures/Graph.php';
 
                 $erdos = array();
@@ -279,7 +277,7 @@ class RestPresenter extends BasePresenter {
 
                 foreach ($snapshoty as $snapshot => $graf) {
 
-                    //if($graf['id']>10) break;
+                    //if($graf['id']>5) break;
                     //$graf['id']=1;
                     $graf_obj = unserialize(SnapshotModel::getGraph($graf['id']));
                     //$graf_obj = unserialize(SnapshotModel::getGraph(1));
@@ -317,13 +315,13 @@ class RestPresenter extends BasePresenter {
                     $clustering_all = clustering($g);
                     $clustering[$graf['id']] = $clustering_all;
 
-//                    // overlap, embedeness
-//                    $ne = neighborhood_embeddedness($g);
-//                    $overlap_all = $ne["neighborhood"];
-//                    $embeddedness_all = $ne["embeddedness"];
-//
-//                    $overlap[$graf['id']] = $overlap_all;
-//                    $embeddedness[$graf['id']] = $embeddedness_all;
+                    // overlap, embedeness
+                    $ne = neighborhood_embeddedness($g);
+                    $overlap_all = $ne["neighborhood"];
+                    $embeddedness_all = $ne["embeddedness"];
+
+                    $overlap[$graf['id']] = $overlap_all;
+                    $embeddedness[$graf['id']] = $embeddedness_all;
 
 //                    // density
 
@@ -332,26 +330,25 @@ class RestPresenter extends BasePresenter {
                     unset($graf_obj);
                 }
 
-
                 $this->template->uzly = $data[0];
                 $this->template->hrany = $data[1];
                 $this->template->zmeneno = $data[2];
                 $this->template->snapshotDetails = $snapshoty;
                 $this->template->erdos = $erdos;
                 $this->template->clustering = $clustering;
-                //$this->template->overlap = $overlap;
-                //$this->template->embeddedness = $embeddedness;
+                $this->template->overlap = $overlap;
+                $this->template->embeddedness = $embeddedness;
 
                 $httpResponse->setContentType('application/xml');
 
                 $httpResponse->setCode(200);
                 $accepted = 1;
-//                break;
-//            }
-//        }
+                break;
+            }
+        }
 
         if ($accepted == 0) {
-            $this->template->error = "The service accepts application/xml requests only.";
+            $this->template->error = "The service accepts application/xml or application/gexf requests only.";
             $httpResponse->setCode(400);
         }
     }

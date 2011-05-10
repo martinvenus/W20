@@ -83,9 +83,11 @@
          $zhoda = array_unique($zhoda); //odstranime duplicity
          $velkost = sizeOf($zhoda); // celkove cislo, kt. sa deli (citatel)
          $embeddedness = $maxVelkost - $velkost; // zistime embeddedness
+
+         $hid = md5($uzol1->nazov . $uzol2->nazov);
          
-         $vysledok["neighborhood"][] = $embeddedness / $velkost; //vysledny overlap
-         $vysledok["embeddedness"][] = $embeddedness; //
+         $vysledok["neighborhood"][$hid] = $embeddedness / $velkost; //vysledny overlap
+         $vysledok["embeddedness"][$hid] = $embeddedness; //
       }  
       return $vysledok;       
    }

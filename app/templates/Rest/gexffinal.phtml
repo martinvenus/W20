@@ -27,7 +27,8 @@ if (isset($error)) {
             <nodes>
             <?php
             foreach ($uzly as $n => $row) {
-                echo "\t\t\t\t\t<node id=\"" . htmlspecialchars($row['id']) . "\" start=\"" . date('Y-m-d', $row['date']) . "\">\n";
+                $uz = $row['id'];
+                echo "\t\t\t\t\t<node id=\"" . htmlspecialchars($uz) . "\" start=\"" . date('Y-m-d', $row['date']) . "\">\n";
                 echo "\t\t\t\t\t\t<attvalues>\n";
                 if (isset($row['snapshotId'])) {
                     echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . htmlspecialchars($row['snapshotId']) . "\"/>\n";
@@ -45,21 +46,21 @@ if (isset($error)) {
                 $previous = -1;
                 $open = 0;
                 for ($i = 1; $i <= $pocetSnapshotu; $i++) {
-                    if (isset($erdos[$i][$row['id']]) && ($previous == -1)) {
-                        echo "\t\t\t\t\t\t\t<attvalue for=\"4\" value=\"" . $erdos[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                    if (isset($erdos[$i][$uz]) && ($previous == -1)) {
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"4\" value=\"" . $erdos[$i][$uz] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                        $previous = $erdos[$i][$row['id']];
-                    } elseif (isset($erdos[$i][$row['id']]) && ($erdos[$i][$row['id']] != $previous)) {
+                        $previous = $erdos[$i][$uz];
+                    } elseif (isset($erdos[$i][$uz]) && ($erdos[$i][$uz] != $previous)) {
                         echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
-                        echo "\t\t\t\t\t\t\t<attvalue for=\"4\" value=\"" . $erdos[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"4\" value=\"" . $erdos[$i][$uz] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                        $previous = $erdos[$i][$row['id']];
-                    } elseif (isset($erdos[$i][$row['id']]) && ($erdos[$i][$row['id']] == $previous)) {
+                        $previous = $erdos[$i][$uz];
+                    } elseif (isset($erdos[$i][$uz]) && ($erdos[$i][$uz] == $previous)) {
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                    } elseif ((!isset($erdos[$i][$row['id']])) && ($previous == -1)) {
+                    } elseif ((!isset($erdos[$i][$uz])) && ($previous == -1)) {
                         $open = 0;
                         continue;
                     } else {
@@ -76,21 +77,21 @@ if (isset($error)) {
                 $previous = -1;
                 $open = 0;
                 for ($i = 1; $i <= $pocetSnapshotu; $i++) {
-                    if (isset($clustering[$i][$row['id']]) && ($previous == -1)) {
-                        echo "\t\t\t\t\t\t\t<attvalue for=\"5\" value=\"" . $clustering[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                    if (isset($clustering[$i][$uz]) && ($previous == -1)) {
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"5\" value=\"" . $clustering[$i][$uz] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                        $previous = $clustering[$i][$row['id']];
-                    } elseif (isset($clustering[$i][$row['id']]) && ($clustering[$i][$row['id']] != $previous)) {
+                        $previous = $clustering[$i][$uz];
+                    } elseif (isset($clustering[$i][$uz]) && ($clustering[$i][$uz] != $previous)) {
                         echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
-                        echo "\t\t\t\t\t\t\t<attvalue for=\"5\" value=\"" . $clustering[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"5\" value=\"" . $clustering[$i][$uz] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                        $previous = $clustering[$i][$row['id']];
-                    } elseif (isset($clustering[$i][$row['id']]) && ($clustering[$i][$row['id']] == $previous)) {
+                        $previous = $clustering[$i][$uz];
+                    } elseif (isset($clustering[$i][$uz]) && ($clustering[$i][$uz] == $previous)) {
                         $end = $snapshotDetails[$i - 1]['date'];
                         $open = 1;
-                    } elseif ((!isset($clustering[$i][$row['id']])) && ($previous == -1)) {
+                    } elseif ((!isset($clustering[$i][$uz])) && ($previous == -1)) {
                         $open = 0;
                         continue;
                     } else {
@@ -112,38 +113,73 @@ if (isset($error)) {
             <?php
             $j = 0;
             foreach ($hrany as $n => $row) {
-                echo "\t\t\t\t\t<edge id=\"" . $j . "\" source=\"" . htmlspecialchars($row['from']) . "\" target=\"" . htmlspecialchars($row['to']) . "\" start=\"" . date('Y-m-d', $row['date']) . "\">\n";
-//                // OVERLAP BEGIN
-//                $previous = -1;
-//                $open = 0;
-//                for ($i = 1; $i <= $pocetSnapshotu; $i++) {
-//                    if (isset($overlap[$i][$row['id']]) && ($previous == -1)) {
-//                        echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . $overlap[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
-//                        $end = $snapshotDetails[$i - 1]['date'];
-//                        $open = 1;
-//                        $previous = $overlap[$i][$row['id']];
-//                    } elseif (isset($overlap[$i][$row['id']]) && ($overlap[$i][$row['id']] != $previous)) {
-//                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
-//                        echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . $overlap[$i][$row['id']] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
-//                        $end = $snapshotDetails[$i - 1]['date'];
-//                        $open = 1;
-//                        $previous = $overlap[$i][$row['id']];
-//                    } elseif (isset($overlap[$i][$row['id']]) && ($overlap[$i][$row['id']] == $previous)) {
-//                        $end = $snapshotDetails[$i - 1]['date'];
-//                        $open = 1;
-//                    } elseif ((!isset($overlap[$i][$row['id']])) && ($previous == -1)) {
-//                        $open = 0;
-//                        continue;
-//                    } else {
-//                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
-//                        $open = 0;
-//                        $previous = -1;
-//                    }
-//                }
-//                if ($open == 1) {
-//                    echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
-//                }
-//                // OVERLAP END
+                echo "\t\t\t\t\t<edge id=\"" . $hr . "\" source=\"" . htmlspecialchars($row['from']) . "\" target=\"" . htmlspecialchars($row['to']) . "\" start=\"" . date('Y-m-d', $row['date']) . "\">\n";
+                echo "\t\t\t\t\t\t<attvalues>\n";
+                // OVERLAP BEGIN
+                $previous = -1;
+                $open = 0;
+                for ($i = 1; $i <= $pocetSnapshotu; $i++) {
+                    $hr = $row['hid'];
+                    if (isset($overlap[$i][$hr]) && ($previous == -1)) {
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . $overlap[$i][$hr] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                        $previous = $overlap[$i][$hr];
+                    } elseif (isset($overlap[$i][$hr]) && ($overlap[$i][$hr] != $previous)) {
+                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"0\" value=\"" . $overlap[$i][$hr] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                        $previous = $overlap[$i][$hr];
+                    } elseif (isset($overlap[$i][$hr]) && ($overlap[$i][$hr] == $previous)) {
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                    } elseif ((!isset($overlap[$i][$hr])) && ($previous == -1)) {
+                        $open = 0;
+                        continue;
+                    } else {
+                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                        $open = 0;
+                        $previous = -1;
+                    }
+                }
+                if ($open == 1) {
+                    echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                }
+                // OVERLAP END
+                // EMBEDDEDNESS BEGIN
+                $previous = -1;
+                $open = 0;
+                for ($i = 1; $i <= $pocetSnapshotu; $i++) {
+                    $hr = $row['hid'];
+                    if (isset($embeddedness[$i][$hr]) && ($previous == -1)) {
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"1\" value=\"" . $embeddedness[$i][$hr] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                        $previous = $embeddedness[$i][$hr];
+                    } elseif (isset($embeddedness[$i][$hr]) && ($embeddedness[$i][$hr] != $previous)) {
+                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                        echo "\t\t\t\t\t\t\t<attvalue for=\"1\" value=\"" . $embeddedness[$i][$hr] . "\" start=\"" . date('Y-m-d', $snapshotDetails[$i - 1]['date']) . "\"";
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                        $previous = $embeddedness[$i][$hr];
+                    } elseif (isset($embeddedness[$i][$hr]) && ($embeddedness[$i][$hr] == $previous)) {
+                        $end = $snapshotDetails[$i - 1]['date'];
+                        $open = 1;
+                    } elseif ((!isset($embeddedness[$i][$hr])) && ($previous == -1)) {
+                        $open = 0;
+                        continue;
+                    } else {
+                        echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                        $open = 0;
+                        $previous = -1;
+                    }
+                }
+                if ($open == 1) {
+                    echo " end=\"" . date('Y-m-d', $end) . "\" />\n";
+                }
+                // EMBEDDEDNESS END
+                echo "\t\t\t\t\t\t</attvalues>\n";
                 echo "\t\t\t\t\t</edge>\n";
 
                 $j++;

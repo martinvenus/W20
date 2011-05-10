@@ -19,7 +19,7 @@ class graf {
    //prida hranu, resp. kazdemu uzlu souseda   
    function addHrana($uzolId1, $uzolId2){                         
       $this->uzly[$uzolId1]->add_sus($this->uzly[$uzolId2]);   
-      $this->uzly[$uzolId2]->add_sus($this->uzly[$uzolId1]);      
+      //$this->uzly[$uzolId2]->add_sus($this->uzly[$uzolId1]);
    }
    
    // ziska pole hran
@@ -29,14 +29,14 @@ class graf {
          $uzol->nazov; // identifikace uzlu, ve kterem se prave nachazime
          foreach($uzol->sus as $sused){
             $over = true;
-            foreach ($overene as $key => $overenaHrana){
-               if ($overenaHrana->uzol1 == $sused->nazov && 
-                   $overenaHrana->uzol2 == $uzol->nazov){
-                  $over = false;
-                  //unset($overene[$key]);
-                  break;
-               }               
-            }
+//            foreach ($overene as $key => $overenaHrana){
+//               if ($overenaHrana->uzol1 == $sused->nazov &&
+//                   $overenaHrana->uzol2 == $uzol->nazov){
+//                  $over = false;
+//                  //unset($overene[$key]);
+//                  break;
+//               }
+//            }
             if ($over){
                // ---- vypocet pre danu hranu            
                // ----------------------------
